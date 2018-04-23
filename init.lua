@@ -1,0 +1,5 @@
+require 'table'
+require 'apps'
+require 'window.layouts'
+require 'window.hotkeys'
+require 'config'
