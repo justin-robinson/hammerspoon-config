@@ -1,5 +1,6 @@
 require 'table'
 require 'apps'
+require 'window.functions'
 require 'window.layouts'
 require 'window.hotkeys'
 require 'config'

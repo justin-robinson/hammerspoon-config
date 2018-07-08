@@ -4,32 +4,33 @@ hs.layout['right50topHalf'] = hs.geometry.unitrect(0.5, 0, 0.5, 0.5)
 hs.layout['bot40'] = hs.geometry.unitrect(0, 0.6, 1, 0.4)
 hs.layout['left60'] = hs.geometry.unitrect(0, 0, 0.6, 1)
 
-local laptopScreen = "Color LCD"
-local curvedScreen = "DELL U3417W"
-local verticalScreen = "LEN LT2452pwC"
+local laptopScreen = 'Color LCD'
+local curvedScreen = 'DELL U3417W'
+local secondaryScreen = 'LEN LT2452pwC'
 
 local threeMonitorLayout = {
-    { "Microsoft Outlook", nil, verticalScreen, hs.layout.left50, nil, nil },
-    { 'Amazon Chime', nil, verticalScreen, hs.layout.right50topHalf, nil, nil },
-    { "Mattermost", nil, verticalScreen, hs.layout.right50botHalf, nil, nil },
-    { "IntelliJ IDEA", nil, curvedScreen, hs.layout.right50, nil, nil },
-    { "iTerm2", nil, laptopScreen, hs.layout.maximize, nil, nil },
+    { 'Microsoft Outlook', nil, laptopScreen, hs.layout.maximize, nil, nil },
+    { 'Amazon Chime', nil, laptopScreen, hs.layout.maximize, nil, nil },
+    { 'Mattermost', nil, laptopScreen, hs.layout.maximize, nil, nil },
+    { 'IntelliJ IDEA', nil, curvedScreen, hs.layout.right50, nil, nil },
+    { 'iTerm2', nil, secondaryScreen, hs.layout.maximize, nil, nil },
 }
 
 local appsToFullScreen = {
     'iTerm2',
-    'IntelliJ IDEA',
+    'Microsoft Outlook',
+    'Mattermost',
+    'Microsoft Outlook',
+    'Amazon Chime'
 }
 
 local appsToMinimize = {
     'Skitch',
 }
 
-callFunctionOnWindowsByAppName = function(appName, windowFunction, shouldExecuteCheck)
+callFunctionOnWindowsByAppName = function(appName, fn)
     for _, window in pairs(hs.window.filter.new { appName }:getWindows()) do
-        if (not window[shouldExecuteCheck](window)) then
-            window[windowFunction](window)
-        end
+        fn(window)
     end
 end
 
@@ -39,10 +40,10 @@ setLayout = function()
     if (numScreens == 3) then hs.layout.apply(threeMonitorLayout) end
 
     for _, appName in pairs(appsToFullScreen) do
-        callFunctionOnWindowsByAppName(appName, 'setFullScreen', 'isFullScreen')
+        callFunctionOnWindowsByAppName(appName, maximizeWindow)
     end
 
     for _, appName in pairs(appsToMinimize) do
-        callFunctionOnWindowsByAppName(appName, 'isMinimized', 'minimize')
+        callFunctionOnWindowsByAppName(appName, minimizeWindow)
     end
 end

@@ -2,13 +2,13 @@ dofile 'table.lua'
 
 -- ensure these apps are open and have at least one window
 local appsToOpen = {
-    'iTerm2',
-    'Amazon Chime',
-    'IntelliJ IDEA',
-    'Google Chrome',
-    'Mattermost',
-    'Microsoft Outlook',
-    'Skitch'
+    --'iTerm2',
+    --'Amazon Chime',
+    --'IntelliJ IDEA',
+    --'Google Chrome',
+    --'Mattermost',
+    --'Microsoft Outlook',
+    --'Skitch'
 }
 
 for _, appName in pairs(appsToOpen) do
@@ -20,16 +20,16 @@ for _, appName in pairs(appsToOpen) do
 end
 
 -- open amazon profile for chrome
-local focusedWindow = hs.window.focusedWindow()
-print(focusedWindow)
-local chrome = hs.appfinder.appFromName 'Google Chrome'
-if (chrome) then
-    local str_people = { "People", "Amazon" }
-    local amazon = chrome:findMenuItem(str_people)
-    if (amazon and not amazon["ticked"]) then
-        chrome:selectMenuItem(str_people)
-    end
-end
-if (focusedWindow) then
-    focusedWindow:focus()
-end
+--local focusedWindow = hs.window.focusedWindow()
+--print(focusedWindow)
+--local chrome = hs.appfinder.appFromName 'Google Chrome'
+--if (chrome) then
+--    local str_people = { "People", "Amazon" }
+--    local amazon = chrome:findMenuItem(str_people)
+--    if (amazon and not amazon["ticked"]) then
+--        chrome:selectMenuItem(str_people)
+--    end
+--end
+--if (focusedWindow) then
+--    focusedWindow:focus()
+--end

@@ -1,4 +1,4 @@
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "R", hs.reload)
+hs.hotkey.bind(hyper, "R", hs.reload)
 
 function reloadConfig(files)
     local doReload = false
