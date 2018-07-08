@@ -1,3 +1,5 @@
+require 'window.hotkeys'
+
 hs.hotkey.bind(hyper, "R", hs.reload)
 
 function reloadConfig(files)

@@ -1,3 +1,5 @@
+require 'window.functions'
+
 hs.layout['top60'] = hs.geometry.unitrect(0, 0, 1, 0.6)
 hs.layout['right50botHalf'] = hs.geometry.unitrect(0.5, 0.5, 0.5, 0.5)
 hs.layout['right50topHalf'] = hs.geometry.unitrect(0.5, 0, 0.5, 0.5)
@@ -12,7 +14,7 @@ local threeMonitorLayout = {
     { 'Microsoft Outlook', nil, laptopScreen, hs.layout.maximize, nil, nil },
     { 'Amazon Chime', nil, laptopScreen, hs.layout.maximize, nil, nil },
     { 'Mattermost', nil, laptopScreen, hs.layout.maximize, nil, nil },
-    { 'IntelliJ IDEA', nil, curvedScreen, hs.layout.right50, nil, nil },
+    { 'Caprine', nil, curvedScreen, hs.layout.right50, nil, nil },
     { 'iTerm2', nil, secondaryScreen, hs.layout.maximize, nil, nil },
 }
 
