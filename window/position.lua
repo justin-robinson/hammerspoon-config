@@ -1,6 +1,6 @@
 hs.window.animationDuration = 0.0
 
-local sizes = { 2, 3, 3 / 2 }
+local sizes = { 1, 4/3, 3 / 2, 2, 3, 4 }
 local fullScreenSizes = { 1, 4 / 3, 2 }
 
 local GRID = { w = 24, h = 24 }
@@ -15,31 +15,23 @@ local pressed = {
     right = false
 }
 
-function nextStep(dim, offs, cb)
+function nextStep(dim, cb)
     if hs.window.focusedWindow() then
-        local axis = dim == 'w' and 'x' or 'y'
-        local oppDim = dim == 'w' and 'h' or 'w'
-        local oppAxis = dim == 'w' and 'y' or 'x'
+
         local win = hs.window.frontmostWindow()
         local screen = win:screen()
 
         cell = hs.grid.get(win, screen)
 
-        local nextSize = sizes[1]
+        local nextSize = sizes[3]
         for i = 1, #sizes do
-            if cell[dim] == GRID[dim] / sizes[i] and
-                    (cell[axis] + (offs and cell[dim] or 0)) == (offs and GRID[dim] or 0) then
+            if cell[dim] == GRID[dim] / sizes[i] then
                 nextSize = sizes[(i % #sizes) + 1]
                 break
             end
         end
 
         cb(cell, nextSize)
-        if cell[oppAxis] ~= 0 and cell[oppAxis] + cell[oppDim] ~= GRID[oppDim] then
-            cell[oppDim] = GRID[oppDim]
-            cell[oppAxis] = 0
-        end
-
         hs.grid.set(win, cell, screen)
     end
 end
@@ -71,31 +63,28 @@ function nextFullScreenStep()
     end
 end
 
-function fullDimension(dim)
-    if hs.window.focusedWindow() then
-        local win = hs.window.frontmostWindow()
-        local screen = win:screen()
-        cell = hs.grid.get(win, screen)
+function upDownPress()
+    nextStep('h', function(cell, nextSize)
+        cell.h = GRID.h / nextSize
+        cell.y = (GRID.h - cell.h) / 2
+    end)
+end
 
-        if (dim == 'x') then
-            cell = '0,0 ' .. GRID.w .. 'x' .. GRID.h
-        else
-            cell[dim] = GRID[dim]
-            cell[dim == 'w' and 'x' or 'y'] = 0
-        end
-
-        hs.grid.set(win, cell, screen)
-    end
+function leftRightPress()
+    nextStep('w', function(cell, nextSize)
+        cell.w = GRID.w / nextSize
+        cell.x = (GRID.w - cell.w) / 2
+    end)
 end
 
 hs.hotkey.bind(hyper, "down", function()
     pressed.down = true
     if pressed.up then
-        fullDimension('h')
+        upDownPress()
     else
-        nextStep('h', true, function(cell, nextSize)
-            cell.y = GRID.h - GRID.h / nextSize
+        nextStep('h', function(cell, nextSize)
             cell.h = GRID.h / nextSize
+            cell.y = GRID.h - GRID.h / nextSize
         end)
     end
 end, function()
@@ -105,9 +94,9 @@ end)
 hs.hotkey.bind(hyper, "right", function()
     pressed.right = true
     if pressed.left then
-        fullDimension('w')
+        leftRightPress()
     else
-        nextStep('w', true, function(cell, nextSize)
+        nextStep('w', function(cell, nextSize)
             cell.x = GRID.w - GRID.w / nextSize
             cell.w = GRID.w / nextSize
         end)
@@ -119,9 +108,9 @@ end)
 hs.hotkey.bind(hyper, "left", function()
     pressed.left = true
     if pressed.right then
-        fullDimension('w')
+        leftRightPress()
     else
-        nextStep('w', false, function(cell, nextSize)
+        nextStep('w', function(cell, nextSize)
             cell.x = 0
             cell.w = GRID.w / nextSize
         end)
@@ -133,9 +122,9 @@ end)
 hs.hotkey.bind(hyper, "up", function()
     pressed.up = true
     if pressed.down then
-        fullDimension('h')
+        upDownPress()
     else
-        nextStep('h', false, function(cell, nextSize)
+        nextStep('h', function(cell, nextSize)
             cell.y = 0
             cell.h = GRID.h / nextSize
         end)
