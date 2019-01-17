@@ -6,24 +6,20 @@ hs.layout['right50topHalf'] = hs.geometry.unitrect(0.5, 0, 0.5, 0.5)
 hs.layout['bot40'] = hs.geometry.unitrect(0, 0.6, 1, 0.4)
 hs.layout['left60'] = hs.geometry.unitrect(0, 0, 0.6, 1)
 
-local laptopScreen = 'Color LCD'
-local curvedScreen = 'DELL U3417W'
-local secondaryScreen = 'LEN LT2452pwC'
+local laptopScreen = hs.screen(69734402)
+local primaryScreen = hs.screen(188992195)
+local secondaryScreen = hs.screen(188992197)
 
 local threeMonitorLayout = {
     { 'Microsoft Outlook', nil, laptopScreen, hs.layout.maximize, nil, nil },
-    { 'Amazon Chime', nil, laptopScreen, hs.layout.maximize, nil, nil },
-    { 'Mattermost', nil, laptopScreen, hs.layout.maximize, nil, nil },
-    { 'Caprine', nil, curvedScreen, hs.layout.right50, nil, nil },
+    { 'Amazon Chime', nil, laptopScreen, hs.layout.right50, nil, nil },
+    { 'Mattermost', nil, laptopScreen, hs.layout.left50, nil, nil },
     { 'iTerm2', nil, secondaryScreen, hs.layout.maximize, nil, nil },
 }
 
 local appsToFullScreen = {
     'iTerm2',
     'Microsoft Outlook',
-    'Mattermost',
-    'Microsoft Outlook',
-    'Amazon Chime'
 }
 
 local appsToMinimize = {
@@ -39,7 +35,10 @@ end
 
 setLayout = function()
     local numScreens = table.size(hs.screen.allScreens());
-    if (numScreens == 3) then hs.layout.apply(threeMonitorLayout) end
+    if (numScreens == 3) then
+        primaryScreen:setPrimary()
+        hs.layout.apply(threeMonitorLayout)
+    end
 
     for _, appName in pairs(appsToFullScreen) do
         callFunctionOnWindowsByAppName(appName, maximizeWindow)
